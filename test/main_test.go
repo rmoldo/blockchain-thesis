@@ -5,7 +5,7 @@ import (
 )
 
 func TestHelloWorld(t *testing.T) {
-	if "Hello World" != "Hello World" {
+	if "Hello World" == "Hello World" {
 		t.Errorf("Expected Hello World")
 	}
 }
