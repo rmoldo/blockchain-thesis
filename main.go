@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	"thesis/blockchain"
 )
 
 func main() {
-	chain := InitBlockchain()
+	chain := blockchain.InitBlockchain()
 
 	chain.AddBlock("Second Block")
 	chain.AddBlock("Third Block")

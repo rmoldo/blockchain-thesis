@@ -1,4 +1,4 @@
-package main
+package blockchain
 
 import (
 	"crypto/sha256"
@@ -13,11 +13,6 @@ type Block struct {
 	Timestamp int64  `json:"timestamp"`
 }
 
-type Blockchain struct {
-	Blocks []*Block
-}
-
-// Compute the hash of a block and return it as a slice of bytes
 func (b *Block) GetBlockHash() []byte {
 	blockInfo := append([]byte(b.Data), b.PrevHash...)
 	blockInfo = append(blockInfo, []byte(strconv.Itoa(int(b.Timestamp)))...)
@@ -37,19 +32,4 @@ func CreateBlock(data string, prevHash []byte) *Block {
 	block.Hash = block.GetBlockHash()
 
 	return block
-}
-
-func (chain *Blockchain) AddBlock(data string) {
-	prevBlock := chain.Blocks[len(chain.Blocks)-1]
-	newBlock := CreateBlock(data, prevBlock.Hash)
-
-	chain.Blocks = append(chain.Blocks, newBlock)
-}
-
-func InitBlockchain() *Blockchain {
-	return &Blockchain{[]*Block{GenerateGenesisBlock()}}
-}
-
-func GenerateGenesisBlock() *Block {
-	return CreateBlock("Genesis Block", []byte{})
 }
