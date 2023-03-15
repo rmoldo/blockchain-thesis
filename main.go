@@ -19,4 +19,9 @@ func main() {
 		fmt.Println(string(jsonBlock))
 
 	}
+
+	transaction := blockchain.CreateTransaction([]byte("terrance"), []byte("butthead"), "Manele", "Smardeala")
+
+	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
+	fmt.Println(string(jsonTransaction))
 }
