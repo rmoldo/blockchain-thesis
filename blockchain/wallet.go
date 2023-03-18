@@ -12,11 +12,12 @@ type Wallet struct {
 	PublicKey  rsa.PublicKey
 }
 
-func (w *Wallet) InitKeys() {
-	privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
-	w.PrivateKey = *privateKey
+func InitWallet() *Wallet {
+	privateKey, _ := rsa.GenerateKey(rand.Reader, 2048)
 
-	w.PublicKey = privateKey.PublicKey
+	return &Wallet{PrivateKey: *privateKey,
+		PublicKey: privateKey.PublicKey,
+	}
 }
 
 func (w *Wallet) Sign(data []byte) []byte {

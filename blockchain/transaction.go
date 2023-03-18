@@ -8,6 +8,7 @@ type Transaction struct {
 	Data              string `json:"data"`
 	Type              string `json:"type"`
 	Timestamp         int64  `json:"timestamp"`
+	Signature         string `json:"signature"`
 }
 
 func CreateTransaction(senderPublicKey []byte, receiverPublicKey []byte, data string, transactionType string) *Transaction {
@@ -16,7 +17,12 @@ func CreateTransaction(senderPublicKey []byte, receiverPublicKey []byte, data st
 		Data:              data,
 		Type:              transactionType,
 		Timestamp:         time.Now().Unix(),
+		Signature:         "",
 	}
 
 	return transaction
+}
+
+func (t *Transaction) SetSignature(signature string) {
+	t.Signature = signature
 }

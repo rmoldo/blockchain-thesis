@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
-
 	"thesis/blockchain"
 )
 
@@ -23,5 +23,11 @@ func main() {
 	transaction := blockchain.CreateTransaction([]byte("terrance"), []byte("butthead"), "Manele", "Smardeala")
 
 	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
+
+	wallet := blockchain.InitWallet()
+	transaction.SetSignature(hex.EncodeToString(wallet.Sign([]byte(jsonTransaction))))
+
+	jsonTransaction, _ = json.MarshalIndent(transaction, "", "\t")
+
 	fmt.Println(string(jsonTransaction))
 }
