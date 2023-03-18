@@ -25,6 +25,13 @@ func main() {
 	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
 
 	wallet := blockchain.InitWallet()
+
+	rawSignature := wallet.Sign([]byte(jsonTransaction))
+
+	signature := hex.EncodeToString(rawSignature)
+
+	fmt.Println(wallet.VerifySignature([]byte(jsonTransaction), signature, wallet.PublicKey))
+
 	transaction.SetSignature(hex.EncodeToString(wallet.Sign([]byte(jsonTransaction))))
 
 	jsonTransaction, _ = json.MarshalIndent(transaction, "", "\t")
