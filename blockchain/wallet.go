@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 )
 
 type Wallet struct {
@@ -22,7 +23,7 @@ func InitWallet() *Wallet {
 }
 
 func (w *Wallet) Sign(data []byte) []byte {
-	// Hash the data
+	// Hash the data e
 	dataHash := sha256.New()
 	_, err := dataHash.Write(data)
 
@@ -61,4 +62,13 @@ func (w *Wallet) VerifySignature(data []byte, signature string, publicKey rsa.Pu
 	}
 
 	return true
+}
+
+func (w *Wallet) CreateTransaction(receiverPublicKey []byte, data string, transactionType string) *Transaction {
+	transaction := CreateTransaction(w.PublicKey.N.Bytes(), receiverPublicKey, data, transactionType)
+	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
+	signature := w.Sign([]byte(jsonTransaction))
+	transaction.SetSignature(hex.EncodeToString(signature))
+
+	return transaction
 }

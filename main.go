@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"thesis/blockchain"
@@ -20,21 +19,13 @@ func main() {
 
 	}
 
-	transaction := blockchain.CreateTransaction([]byte("terrance"), []byte("butthead"), "Manele", "Smardeala")
-
-	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
-
 	wallet := blockchain.InitWallet()
 
-	rawSignature := wallet.Sign([]byte(jsonTransaction))
-
-	signature := hex.EncodeToString(rawSignature)
-
-	fmt.Println(wallet.VerifySignature([]byte(jsonTransaction), signature, wallet.PublicKey))
-
-	transaction.SetSignature(hex.EncodeToString(wallet.Sign([]byte(jsonTransaction))))
-
-	jsonTransaction, _ = json.MarshalIndent(transaction, "", "\t")
-
+	transaction := wallet.CreateTransaction(wallet.PublicKey.N.Bytes(), "Cereale", "TRANSFER")
+	jsonTransaction, _ := json.MarshalIndent(transaction, "", "\t")
 	fmt.Println(string(jsonTransaction))
+
+	tmpTrans, _ := json.MarshalIndent(transaction.GetTransactionWithDefaultSignature(), "", "\t")
+
+	fmt.Println(wallet.VerifySignature([]byte(tmpTrans), transaction.Signature, wallet.PublicKey))
 }

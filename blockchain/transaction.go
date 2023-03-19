@@ -26,3 +26,10 @@ func CreateTransaction(senderPublicKey []byte, receiverPublicKey []byte, data st
 func (t *Transaction) SetSignature(signature string) {
 	t.Signature = signature
 }
+
+func (t *Transaction) GetTransactionWithDefaultSignature() *Transaction {
+	transaction := *t
+	transaction.Signature = ""
+
+	return &transaction
+}
