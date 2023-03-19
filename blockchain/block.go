@@ -2,19 +2,21 @@ package blockchain
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"strconv"
 	"time"
 )
 
 type Block struct {
-	Hash      []byte `json:"hash"`
-	Data      string `json:"data"` // TODO: change to transactions when implemented
-	PrevHash  []byte `json:"previous_hash"`
-	Timestamp int64  `json:"timestamp"`
+	Hash         []byte         `json:"hash"`
+	Transactions []*Transaction `json:"transactions"`
+	PrevHash     []byte         `json:"previous_hash"`
+	Timestamp    int64          `json:"timestamp"`
 }
 
 func (b *Block) GetBlockHash() []byte {
-	blockInfo := append([]byte(b.Data), b.PrevHash...)
+	jsonTransactions, _ := json.MarshalIndent(b.Transactions, "", "\t")
+	blockInfo := append([]byte(jsonTransactions), b.PrevHash...)
 	blockInfo = append(blockInfo, []byte(strconv.Itoa(int(b.Timestamp)))...)
 
 	hash := sha256.Sum256(blockInfo)
@@ -24,9 +26,9 @@ func (b *Block) GetBlockHash() []byte {
 
 func CreateBlock(data string, prevHash []byte) *Block {
 	block := &Block{Hash: []byte{},
-		Data:      data,
-		PrevHash:  prevHash,
-		Timestamp: time.Now().Unix(),
+		Transactions: []*Transaction{},
+		PrevHash:     prevHash,
+		Timestamp:    time.Now().Unix(),
 	}
 
 	block.Hash = block.GetBlockHash()
